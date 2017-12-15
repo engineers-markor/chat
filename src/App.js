@@ -2,17 +2,28 @@ import React, { Component } from 'react';
 import './App.css';
 import Message from './components/Message';
 import Footer from './components/Footer';
+import LogIn from './components/LogIn';
 import { base } from './base';
+import { Route, Redirect } from 'react-router-dom'
+
 
 class App extends Component {
   constructor() {
     super();
-    this.saveMessage = this
-      .saveMessage
-      .bind(this);
+    this.saveMessage = this.saveMessage.bind(this);
+    this.logIn = this.logIn.bind(this);
     this.state = {
-      messages: {}
+      user: null,
+      messages: {},
+      auth: false,
     }
+  }
+
+  logIn(username) {
+    this.setState({
+      username: username,
+      auth: true,
+    });
   }
 
   componentWillMount() {
@@ -26,13 +37,13 @@ class App extends Component {
     base.removeBinding(this.messagesRef);
   }
 
-  saveMessage(name, textMessage) {
+  saveMessage(textMessage) {
     const id = Date.now();
     const messages = {
       ...this.state.messages
     };
     messages[id] = {
-      name: name,
+      name: this.state.username,
       message: textMessage,
       id: id
     }
@@ -47,17 +58,28 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">CHAT</h1>
         </header>
-        <div className="Cheat-body">
-          {messagesIds.map(messageId => (<Message
-            key={messageId}
-            name={this.state.messages[messageId].name}
-            text={this.state.messages[messageId].message}
-            saveMessage={this.saveMessage} />))}
-        </div>
-        <div>
-          <Footer saveMessage={this.saveMessage} />
-        </div>
-      </div>
+        {this.state.auth ? <Redirect to="/chat" /> : <Redirect to="/login" />}
+        <Route exact path="/chat" render={props => (
+          this.state.auth ?
+            <div>
+              <div className="Cheat-body">
+                {messagesIds.map(messageId => (<Message
+                  key={messageId}
+                  name={this.state.messages[messageId].name}
+                  text={this.state.messages[messageId].message}
+                  saveMessage={this.saveMessage} />))}
+              </div>
+              <div>
+                <Footer saveMessage={this.saveMessage} />
+              </div>
+            </div>
+            :
+            <Redirect to="/login" />
+        )} />
+        <Route path="/login" render={props => (
+          <LogIn logIn={this.logIn} />
+        )} />
+      </div >
     );
   }
 }
