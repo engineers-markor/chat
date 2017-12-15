@@ -1,39 +1,62 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './App.css';
 import Message from './components/Message';
 import Footer from './components/Footer';
+import {base} from './base';
 
 class App extends Component {
   constructor() {
     super();
-    this.saveMessage = this.saveMessage.bind(this);
+    this.saveMessage = this
+      .saveMessage
+      .bind(this);
     this.state = {
-      messages: [],
+      messages: {}
     }
   }
-  saveMessage(name, textMessage) {
-    const prevMessages = this.state.messages;
-    prevMessages.push({ name: name, message: textMessage });
-    this.setState({
-      messages: prevMessages
+
+  componentWillMount() {
+    this.messagesRef = base.syncState('messages', {
+      context: this,
+      state: 'messages'
     });
   }
 
+  componentWillUnmount() {
+    base.removeBinding(this.messagesRef);
+  }
 
+  saveMessage(name, textMessage) {
+    const id = Date.now();
+    const messages = {
+      ...this.state.messages
+    };
+    messages[id] = {
+      name: name,
+      message: textMessage,
+      id: id
+    }
+    this.setState({messages});
+    console.log(this.state.messages.length)
+  }
 
   render() {
+    const messagesIds = Object.keys(this.state.messages);
     return (
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">CHAT</h1>
         </header>
-        {
-          this.state.messages.map((message, index) => {
-            
-            return <Message key={index} name={message.name} text={message.message}/>
-          })
-        }
-        <Footer saveMessage={this.saveMessage} />
+        <div className="Cheat-body">
+          {messagesIds.map(messageId => (<Message
+            key={messageId}
+            name={this.state.messages[messageId].name}
+            text={this.state.messages[messageId].message}
+            saveMessage={this.saveMessage}/>))}
+        </div>
+        <div>
+          <Footer saveMessage={this.saveMessage}/>
+        </div>
       </div>
     );
   }
