@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import Message from './components/Message';
 import Footer from './components/Footer';
-import {base} from './base';
+import { base } from './base';
 
 class App extends Component {
   constructor() {
@@ -36,7 +36,7 @@ class App extends Component {
       message: textMessage,
       id: id
     }
-    this.setState({messages});
+    this.setState({ messages });
     console.log(this.state.messages.length)
   }
 
@@ -52,10 +52,10 @@ class App extends Component {
             key={messageId}
             name={this.state.messages[messageId].name}
             text={this.state.messages[messageId].message}
-            saveMessage={this.saveMessage}/>))}
+            saveMessage={this.saveMessage} />))}
         </div>
         <div>
-          <Footer saveMessage={this.saveMessage}/>
+          <Footer saveMessage={this.saveMessage} />
         </div>
       </div>
     );
