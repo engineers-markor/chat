@@ -1,40 +1,44 @@
 import React, { Component } from 'react';
 import './App.css';
-import Message from './components/Message';
-import Footer from './components/Footer';
 import LogIn from './components/LogIn';
-import { base } from './base';
+import { base, app } from './base';
 import { Route, Redirect } from 'react-router-dom'
+import Header from './components/Header';
+import Chat from './components/Chat';
+import LogOut from './components/LogOut';
 
 
 class App extends Component {
   constructor() {
     super();
     this.saveMessage = this.saveMessage.bind(this);
-    this.logIn = this.logIn.bind(this);
     this.state = {
-      user: null,
-      messages: {},
+      user: {},
       auth: false,
+      loading: true,
     }
   }
 
-  logIn(username) {
-    this.setState({
-      username: username,
-      auth: true,
-    });
-  }
-
   componentWillMount() {
-    this.messagesRef = base.syncState('messages', {
-      context: this,
-      state: 'messages'
+    this.removeAuthListener = app.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({
+          auth: true,
+          loading: false,
+          user: user,
+        });
+      } else {
+        this.setState({
+          auth: false,
+          loading: false,
+        });
+      }
     });
   }
 
   componentWillUnmount() {
     base.removeBinding(this.messagesRef);
+    this.removeAuthListener();
   }
 
   saveMessage(textMessage) {
@@ -43,41 +47,37 @@ class App extends Component {
       ...this.state.messages
     };
     messages[id] = {
-      name: this.state.username,
+      name: this.state.user.email,
       message: textMessage,
       id: id
     }
     this.setState({ messages });
-    console.log(this.state.messages.length)
+  }
+
+  logOut() {
+    app.auth().signOut();
   }
 
   render() {
-    const messagesIds = Object.keys(this.state.messages);
+    if (this.state.loading)
+      return (<h1>Loading</h1>);
     return (
       <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">CHAT</h1>
-        </header>
-        {this.state.auth ? <Redirect to="/chat" /> : <Redirect to="/login" />}
-        <Route exact path="/chat" render={props => (
-          this.state.auth ?
-            <div>
-              <div className="Cheat-body">
-                {messagesIds.map(messageId => (<Message
-                  key={messageId}
-                  name={this.state.messages[messageId].name}
-                  text={this.state.messages[messageId].message}
-                  saveMessage={this.saveMessage} />))}
-              </div>
-              <div>
-                <Footer saveMessage={this.saveMessage} />
-              </div>
-            </div>
-            :
-            <Redirect to="/login" />
+        <Header
+          auth={this.state.auth} />
+
+        <Route exact path="/" render={props => (
+          this.state.auth ? <Redirect to="/chat" /> : <Redirect to="/login" />
+        )} />
+        <Route exact path="/logout" render={props => (
+          <LogOut />
+        )} />
+        <Route path="/chat" render={props => (
+          this.state.auth ? <Chat
+            user={this.state.user} /> : <Redirect to="/login" />
         )} />
         <Route path="/login" render={props => (
-          <LogIn logIn={this.logIn} />
+          this.state.auth ? <Redirect to="/chat" /> : <LogIn logIn={this.logIn} />
         )} />
       </div >
     );

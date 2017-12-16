@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import validator from 'validator';
 
 const style = {
     position: 'fixed',
@@ -10,14 +11,9 @@ const style = {
 export default class Footer extends Component {
     constructor(props) {
         super(props);
-        this.setTextMessage = this
-            .setTextMessage
-            .bind(this);
-        this.sendMessage = this
-            .sendMessage
-            .bind(this);
+        this.setTextMessage = this.setTextMessage.bind(this);
+        this.sendMessage = this.sendMessage.bind(this);
         this.state = {
-            name: '',
             textMessage: ''
         }
     }
@@ -28,10 +24,12 @@ export default class Footer extends Component {
 
     sendMessage(e) {
         e.preventDefault();
-        this.setState({ textMessage: '' });
-        this
-            .props
-            .saveMessage(this.state.textMessage);
+        if (!validator.isEmpty(this.state.textMessage)) {
+            //save message
+            this.props.savaMessage(this.state.textMessage);
+            //-------
+            this.setState({ textMessage: '' });
+        }
 
     }
 
@@ -43,24 +41,26 @@ export default class Footer extends Component {
                         width: `60%`,
                         margin: `0px auto`
                     }}>
-                    <input
-                        type="text"
-                        placeholder="message"
-                        value={this.state.textMessage}
-                        style={{
-                            padding: `10px`,
-                            margin: `30px`,
-                            minWidth: `500px`
-                        }}
-                        onChange={this.setTextMessage} />
-                    <input
-                        style={{
-                            padding: `10px`,
-                            background: `white`
-                        }}
-                        type="button"
-                        value="SEND"
-                        onClick={this.sendMessage} />
+                    <form onSubmit={(e) => this.sendMessage(e)}>
+                        <input
+                            type="text"
+                            placeholder="message"
+                            value={this.state.textMessage}
+                            style={{
+                                padding: `10px`,
+                                margin: `30px`,
+                                minWidth: `500px`
+                            }}
+                            onChange={this.setTextMessage} />
+                        <input
+                            style={{
+                                padding: `10px`,
+                                background: `white`
+                            }}
+                            type="button"
+                            value="SEND"
+                            onClick={this.sendMessage} />
+                    </form>
                 </div>
             </div>
         )
