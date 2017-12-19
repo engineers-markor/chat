@@ -63,9 +63,10 @@ class App extends Component {
       return (<h1>Loading</h1>);
     return (
       <div className="App">
-        <Header
-          auth={this.state.auth} />
-
+        <div className="header">
+          <Header
+            auth={this.state.auth} />
+        </div>
         <Route exact path="/" render={props => (
           this.state.auth ? <Redirect to="/chat" /> : <Redirect to="/login" />
         )} />
@@ -83,5 +84,6 @@ class App extends Component {
     );
   }
 }
+
 
 export default App;

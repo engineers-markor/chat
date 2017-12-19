@@ -1,12 +1,6 @@
 import React, { Component } from 'react'
 import validator from 'validator';
-
-const style = {
-    position: 'fixed',
-    bottom: '0px',
-    width: `100%`,
-    margin: `10px 0px`
-};
+import '../App.css';
 
 export default class Footer extends Component {
     constructor(props) {
@@ -25,17 +19,14 @@ export default class Footer extends Component {
     sendMessage(e) {
         e.preventDefault();
         if (!validator.isEmpty(this.state.textMessage)) {
-            //save message
             this.props.savaMessage(this.state.textMessage);
-            //-------
             this.setState({ textMessage: '' });
         }
-
     }
 
     render() {
         return (
-            <div style={style}>
+            <div className="footer">
                 <div
                     style={{
                         width: `60%`,
@@ -43,21 +34,21 @@ export default class Footer extends Component {
                     }}>
                     <form onSubmit={(e) => this.sendMessage(e)}>
                         <input
+                            className="pt-input"
                             type="text"
                             placeholder="message"
                             value={this.state.textMessage}
                             style={{
-                                padding: `10px`,
-                                margin: `30px`,
-                                minWidth: `500px`
+                                minWidth: `250px`,
+                                float: `left`
                             }}
                             onChange={this.setTextMessage} />
-                        <input
-                            style={{
-                                padding: `10px`,
-                                background: `white`
-                            }}
+                        <button
+                            className="pt-button pt-intent-primary pt-icon-arrow-up"
                             type="button"
+                            style={{
+                                float: `left`
+                            }}
                             value="SEND"
                             onClick={this.sendMessage} />
                     </form>

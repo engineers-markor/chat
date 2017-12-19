@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { base } from '../base';
 import Footer from './Footer';
 import Message from './Message';
+import '../App.css';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 export default class Chat extends Component {
     constructor(props) {
@@ -35,19 +37,28 @@ export default class Chat extends Component {
         });
     }
 
+    componentDidUpdate() {
+        this.scrollComponent.scrollToBottom();
+    }
+
     render() {
         const messagesIds = Object.keys(this.state.messages);
         const messages = this.state.messages;
         return (
-            <div>
-                {messagesIds.map((id) => {
-                    return <Message
-                        key={id}
-                        name={messages[id].username}
-                        textMessage={messages[id].textMessage}
-                    />
-                })}
-
+            <div className="main">
+                <Scrollbars style={{ width: `auto`, height: `auto` }} autoHide ref={c => { this.scrollComponent = c }} >
+                    {messagesIds.map((id) => {
+                        let float = `left`
+                        if (messages[id].id === this.props.user.uid)
+                            float = `right`
+                        return (<Message
+                            float={float}
+                            key={id}
+                            name={messages[id].username}
+                            textMessage={messages[id].textMessage}
+                        />)
+                    })}
+                </Scrollbars>
                 <Footer
                     savaMessage={this.savaMessage} />
             </div>
