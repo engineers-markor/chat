@@ -1,26 +1,32 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import validator from 'validator';
 import '../App.css';
 
 export default class Footer extends Component {
     constructor(props) {
         super(props);
-        this.setTextMessage = this.setTextMessage.bind(this);
-        this.sendMessage = this.sendMessage.bind(this);
+        this.setTextMessage = this
+            .setTextMessage
+            .bind(this);
+        this.sendMessage = this
+            .sendMessage
+            .bind(this);
         this.state = {
             textMessage: ''
         }
     }
 
     setTextMessage(e) {
-        this.setState({ textMessage: e.target.value });
+        this.setState({textMessage: e.target.value});
     }
 
     sendMessage(e) {
         e.preventDefault();
         if (!validator.isEmpty(this.state.textMessage)) {
-            this.props.savaMessage(this.state.textMessage);
-            this.setState({ textMessage: '' });
+            this
+                .props
+                .savaMessage(this.state.textMessage);
+            this.setState({textMessage: ''});
         }
     }
 
@@ -29,9 +35,9 @@ export default class Footer extends Component {
             <div className="footer">
                 <div
                     style={{
-                        width: `60%`,
-                        margin: `0px auto`
-                    }}>
+                    marginLeft: `5px`,
+                    marginBottom: `5px`
+                }}>
                     <form onSubmit={(e) => this.sendMessage(e)}>
                         <input
                             className="pt-input"
@@ -39,18 +45,18 @@ export default class Footer extends Component {
                             placeholder="message"
                             value={this.state.textMessage}
                             style={{
-                                minWidth: `250px`,
-                                float: `left`
-                            }}
-                            onChange={this.setTextMessage} />
+                            minWidth: `250px`,
+                            float: `left`
+                        }}
+                            onChange={this.setTextMessage}/>
                         <button
                             className="pt-button pt-intent-primary pt-icon-arrow-up"
                             type="button"
                             style={{
-                                float: `left`
-                            }}
+                            float: `left`
+                        }}
                             value="SEND"
-                            onClick={this.sendMessage} />
+                            onClick={this.sendMessage}/>
                     </form>
                 </div>
             </div>
