@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import validator from 'validator';
 import {app, facebookProvider} from '../base';
 import {Redirect} from 'react-router-dom';
+import '../App.css';
 
 export default class LogIn extends Component {
     constructor(props) {
@@ -59,18 +60,10 @@ export default class LogIn extends Component {
     logIn(e) {
         e.preventDefault();
         if (!validator.isEmpty(this.state.username) && validator.isEmail(this.state.email) && !validator.isEmpty(this.state.password) && this.state.password.length > 5) {
-            //console.log(this.state);
-            app
-                .auth()
-                .createUserWithEmailAndPassword(this.state.email, this.state.password)
-                .then(() => {
-                    // const user = app.auth().currentUser; base.post(`users/${user.uid}`, { data: {
-                    // username: this.state.username, email: this.state.email } })
-                    this.setState({redirect: true})
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            console.log("pass")
+            // app     .auth()     .createUserWithEmailAndPassword(this.state.email,
+            // this.state.password)     .then(() => {         this.setState({redirect:
+            // true})     })     .catch((error) => {         console.log(error);     });
         }
     }
 
@@ -81,36 +74,46 @@ export default class LogIn extends Component {
         }
 
         return (
-            <div className="login">
-                {/* <label>Enter Username </label>
-                <input
-                    type="text"
-                    value={this.state.username}
-                    onChange={this.setUsername}
-                    placeholder="User Name" />
-                <br />
-                <label>Enter Email </label>
-                <input
-                    type="email"
-                    value={this.state.email}
-                    onChange={this.setEmail}
-                    placeholder="Email" />
-                <br />
-                <label>Enter Password </label>
-                <input
-                    placeholder="Password"
-                    type="password"
-                    value={this.state.password}
-                    onChange={this.setPassword} />
-                <br />
-                <input type="button" onClick={this.logIn} value="Log In" />
-                <br /> */}
-                <br/>
-                <input
-                    className="pt-button pt-intent-primary pt-icon-log-out"
-                    type="button"
-                    onClick={this.logInWithFacebook}
-                    value="Log In with Facebook"/>
+            <div className="form">
+                <div className="loginFacebook">
+                    <button
+                        className="pt-button pt-intent-primary pt-icon-log-in"
+                        type="button"
+                        onClick={this.logInWithFacebook}>Log In with Facebook</button>
+                </div>
+                <div className="singup">
+                    <h5>Create new Account</h5>
+                    <input
+                        type="text"
+                        value={this.state.username}
+                        onChange={this.setUsername}
+                        placeholder="User Name"/>
+                    <input
+                        type="email"
+                        value={this.state.email}
+                        onChange={this.setEmail}
+                        placeholder="Email"/>
+                    <input
+                        placeholder="Password"
+                        type="password"
+                        value={this.state.password}
+                        onChange={this.setPassword}/>
+                    <input type="button" onClick={this.logIn} value="Create Account"/>
+                </div>
+                <div className="login">
+                    <h5>Log In</h5>
+                    <input
+                        type="email"
+                        value={this.state.email}
+                        onChange={this.setEmail}
+                        placeholder="Email"/>
+                    <input
+                        placeholder="Password"
+                        type="password"
+                        value={this.state.password}
+                        onChange={this.setPassword}/>
+                    <input type="button" onClick={this.logIn} value="Log In"/>
+                </div>
             </div>
         )
     }

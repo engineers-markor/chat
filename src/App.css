@@ -23,6 +23,13 @@
   background: #e0ebeb;
 }
 
+.form {
+  display: grid;
+  grid-template-columns: 2fr 2fr;
+  grid-area: main;
+  grid-gap: 30px;
+}
+
 .footer {
   position: fixed;
   bottom: 0px;
@@ -41,7 +48,23 @@
   background: red;
 }
 
-.login {
-  grid-area: main;
+.loginFacebook {
+  grid-column: 1 /3;
   justify-self: center;
+  
+}
+
+.singup {
+  grid-column: 1 /2;
+  display: grid;
+  justify-items: center;
+  grid-gap: 16px;
+}
+
+.login {
+  align-self: flex-start;
+  grid-column: 2 /3;
+  display: grid;
+  justify-items: center;
+  grid-gap: 16px;
 }
