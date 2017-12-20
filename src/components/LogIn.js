@@ -107,7 +107,7 @@ export default class LogIn extends Component {
                 <br /> */}
                 <br/>
                 <input
-                    className="pt-button pt-icon-log-out"
+                    className="pt-button pt-intent-primary pt-icon-log-out"
                     type="button"
                     onClick={this.logInWithFacebook}
                     value="Log In with Facebook"/>
