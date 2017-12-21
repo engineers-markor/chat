@@ -30,9 +30,9 @@ export default class Chat extends Component {
             data: {
                 time: Date.now(),
                 id: user.uid,
-                username: user.displayName,
+                username: user.username,
                 textMessage: textMessage,
-                photoUrl: user.photoURL,
+                photoUrl: user.photoUrl,
             }
         });
     }
