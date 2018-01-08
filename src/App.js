@@ -35,7 +35,6 @@ class App extends Component {
                   email: data.email
                 }
               });
-              console.log(this.state);
             })
             .catch(error => {
               //handle error

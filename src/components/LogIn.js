@@ -77,7 +77,6 @@ export default class LogIn extends Component {
                 if (result.additionalUserInfo.isNewUser) {
                     this.addUser(result.user.uid, result.user.email, result.user.displayName, result.user.photoURL);
                 }
-                console.log(result);
                 this.setState({redirect: true})
             })
             .catch(error => {
@@ -93,12 +92,8 @@ export default class LogIn extends Component {
             app
                 .auth()
                 .signInWithEmailAndPassword(this.state.loginEmail, this.state.loginPassword)
-                .then((user) => {
-                    console.log(user);
-                })
-                .catch(error => {
-                    console.log(error)
-                });
+                .then((user) => {})
+                .catch(error => {});
         }
     }
 
@@ -122,7 +117,6 @@ export default class LogIn extends Component {
                 })
                 .then((user) => {
                     if (user) {
-                        console.log(user);
                         this.addUser(user.uid, user.email, this.state.username, user.photoURL
                             ? user.photoURL
                             : '');
@@ -158,7 +152,7 @@ export default class LogIn extends Component {
                         type="button"
                         onClick={this.logInWithFacebook}>Log In with Facebook</button>
                 </div>
-                <div className="singup">
+                <form onSubmit={this.createAccount} className="singup">
                     <h5>Create new Account</h5>
                     <input
                         type="text"
@@ -175,26 +169,25 @@ export default class LogIn extends Component {
                         type="password"
                         value={this.state.password}
                         onChange={this.setPassword}/>
-                    <input
-                        className="pt-button"
-                        type="button"
-                        onClick={this.createAccount}
-                        value="Create Account"/>
-                </div>
-                <div className="login">
+                    <input className="pt-button" type="submit" value="Create Account"/>
+                </form>
+
+                <form className="login" onSubmit={this.login}>
                     <h5>Log In</h5>
                     <input
                         type="email"
                         value={this.state.loginEmail}
                         onChange={this.setLoginEmail}
-                        placeholder="Email"/>
+                        placeholder="Email"
+                        required/>
                     <input
                         placeholder="Password"
                         type="password"
                         value={this.state.loginPassword}
-                        onChange={this.setLoginPassword}/>
-                    <input className="pt-button" type="button" onClick={this.login} value="Log In"/>
-                </div>
+                        onChange={this.setLoginPassword}
+                        required/>
+                    <input className="pt-button" type="submit" value="Log In"/>
+                </form>
             </div>
         );
     }
